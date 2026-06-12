@@ -38,28 +38,35 @@
 
   /* ---- bottom palette ---- */
   #deck{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:10;
-    display:flex;align-items:center;gap:18px;padding:12px 22px;
-    background:rgba(241,232,215,.72);backdrop-filter:blur(8px);
-    border:1px solid rgba(60,50,40,.18);border-radius:40px;box-shadow:0 2px 14px rgba(60,50,40,.12)}
-  .dot{width:30px;height:30px;border-radius:50%;cursor:pointer;position:relative;border:none;
-    box-shadow:inset 0 -3px 5px rgba(0,0,0,.25), inset 0 2px 3px rgba(255,255,255,.35), 0 1px 3px rgba(0,0,0,.2);
-    transition:transform .2s}
-  .dot:hover{transform:scale(1.12)}
-  .dot.sel::after{content:'';position:absolute;inset:-6px;border:1.4px solid rgba(60,50,40,.55);border-radius:50%}
-  .dot span{position:absolute;top:36px;left:50%;transform:translateX(-50%);font-size:10px;
-    letter-spacing:.1em;color:#5a523f;white-space:nowrap}
-  #deck .sep{width:1px;height:26px;background:rgba(60,50,40,.2)}
-  .act{font-family:inherit;font-size:12px;letter-spacing:.18em;color:#4a4337;background:none;
-    border:1px solid rgba(60,50,40,.3);border-radius:18px;padding:6px 13px;cursor:pointer;transition:all .2s}
+    display:flex;align-items:center;justify-content:center;gap:14px;row-gap:8px;
+    padding:10px 20px 8px;max-width:94vw;flex-wrap:wrap;
+    background:rgba(241,232,215,.78);backdrop-filter:blur(8px);
+    border:1px solid rgba(60,50,40,.18);border-radius:26px;box-shadow:0 2px 14px rgba(60,50,40,.12)}
+  .dot{display:flex;flex-direction:column;align-items:center;gap:3px;flex-shrink:0;
+    background:none;border:none;cursor:pointer;padding:2px 1px;transition:transform .2s}
+  .dot:hover{transform:translateY(-2px)}
+  .dot i{display:block;width:28px;height:28px;border-radius:50%;position:relative;
+    box-shadow:inset 0 -3px 5px rgba(0,0,0,.25), inset 0 2px 3px rgba(255,255,255,.35), 0 1px 3px rgba(0,0,0,.2)}
+  .dot.sel i::after{content:'';position:absolute;inset:-5px;border:1.4px solid rgba(60,50,40,.55);border-radius:50%}
+  .dot span{font-size:10px;letter-spacing:.08em;color:#5a523f;white-space:nowrap;font-family:inherit}
+  #deck .sep{width:1px;height:30px;background:rgba(60,50,40,.2);flex-shrink:0}
+  .act{font-family:inherit;font-size:12px;letter-spacing:.16em;color:#4a4337;background:none;
+    border:1px solid rgba(60,50,40,.3);border-radius:18px;padding:6px 13px;cursor:pointer;
+    transition:background .2s,color .2s;white-space:nowrap;flex-shrink:0}
   .act:hover{background:rgba(60,50,40,.08)}
   .act.on{background:var(--ink);color:#f1e8d7;border-color:var(--ink)}
 
-  @media (max-width:640px){
-    #title .main{font-size:24px}
-    #deck{gap:12px;padding:10px 14px;bottom:14px;max-width:94vw;flex-wrap:wrap;justify-content:center;border-radius:24px}
-    .dot{width:26px;height:26px}
-    .dot span{display:none}
-    .act{font-size:11px;padding:5px 10px}
+  @media (max-width:680px){
+    #title{top:14px;left:14px;gap:8px}
+    #title .main{font-size:22px}
+    #hanko{width:27px;height:27px;font-size:13px;right:14px;top:14px}
+    #deck{gap:9px;padding:8px 10px 6px;bottom:10px;border-radius:20px}
+    .dot i{width:24px;height:24px}
+    .dot span{font-size:9px}
+    .act{font-size:11px;padding:5px 9px;letter-spacing:.08em}
+    #hint .jp{font-size:12px;letter-spacing:.18em}
+    #hint .zh{font-size:11px;letter-spacing:.12em}
+    #hint{width:88vw}
   }
 </style>
 </head>
@@ -78,14 +85,14 @@
 </div>
 
 <div id="deck">
-  <button class="dot sel" data-i="0" style="background:radial-gradient(circle at 35% 30%,#56504a,#16130f)"><span>墨</span></button>
-  <button class="dot" data-i="1" style="background:radial-gradient(circle at 35% 30%,#3e5e8e,#13263f)"><span>藍</span></button>
-  <button class="dot" data-i="2" style="background:radial-gradient(circle at 35% 30%,#d4604a,#8e2418)"><span>朱</span></button>
-  <button class="dot" data-i="3" style="background:radial-gradient(circle at 35% 30%,#5d7a52,#27402a)"><span>松</span></button>
-  <button class="dot" data-i="4" style="background:radial-gradient(circle at 35% 30%,#c9a64e,#7e6020)"><span>金茶</span></button>
-  <button class="dot" data-i="5" style="background:radial-gradient(circle at 35% 30%,#ffffff,#cfd8da);"><span>水</span></button>
+  <button class="dot sel" data-i="0"><i style="background:radial-gradient(circle at 35% 30%,#56504a,#16130f)"></i><span>墨</span></button>
+  <button class="dot" data-i="1"><i style="background:radial-gradient(circle at 35% 30%,#3e5e8e,#13263f)"></i><span>藍</span></button>
+  <button class="dot" data-i="2"><i style="background:radial-gradient(circle at 35% 30%,#d4604a,#8e2418)"></i><span>朱</span></button>
+  <button class="dot" data-i="3"><i style="background:radial-gradient(circle at 35% 30%,#5d7a52,#27402a)"></i><span>松</span></button>
+  <button class="dot" data-i="4"><i style="background:radial-gradient(circle at 35% 30%,#c9a64e,#7e6020)"></i><span>金茶</span></button>
+  <button class="dot" data-i="5"><i style="background:radial-gradient(circle at 35% 30%,#ffffff,#cfd8da)"></i><span>水</span></button>
   <div class="sep"></div>
-  <button class="act on" id="bAlt">交互</button>
+  <button class="act on" id="bAlt">暈圈</button>
   <button class="act" id="bWind">微風</button>
   <button class="act" id="bClear">流す</button>
   <button class="act" id="bSave">保存</button>
@@ -375,7 +382,7 @@ const INKS=[
   {a:[0.40,0.95,1.95],s:'金茶'},    // kincha ochre
   {a:null,s:'水'}                   // water (dispersant)
 ];
-let inkSel=0, altMode=true, windOn=false, altPhase=0;
+let inkSel=0, altMode=true, windOn=false;
 
 /* ---------- splat ops ---------- */
 const aspect=()=>canvas.width/canvas.height;
@@ -424,11 +431,19 @@ function dropWarp(x,y,r,inkA){
 
 /* a "drop": Kelvin marbling transform — existing ink is displaced
    outward incompressibly; ink stamps a disc, water stamps paper */
-function drop(x,y,inkIdx){
+function drop(x,y,inkIdx,rOverride){
   const ink=INKS[inkIdx];
-  const r=ink.a?0.030+Math.random()*0.014:0.026+Math.random()*0.012;
-  dropWarp(x,y,r,ink.a?ink.a.map(v=>v*1.8):null);
-  splatVelRadial(x,y,0.0014,ink.a?8:14);
+  const r=rOverride||(ink.a?0.030+Math.random()*0.014:0.026+Math.random()*0.012);
+  dropWarp(x,y,r,ink.a?ink.a.map(v=>v*3.2):null);
+}
+/* a tap: always lays visible ink; in 暈圈 mode a smaller water push
+   follows automatically, opening each blot into a ring */
+function tapDrop(x,y,inkIdx){
+  drop(x,y,inkIdx);
+  if(altMode&&inkIdx!==5){
+    const rw=(0.030+Math.random()*0.014)*0.50;
+    setTimeout(()=>drop(x,y,5,rw),170);
+  }
 }
 function stir(x,y,dx,dy){
   splatVelDir(x,y,dx*2500,dy*2500,0.0009);
@@ -536,9 +551,7 @@ canvas.addEventListener('pointerdown',e=>{
   const[x,y]=norm(e);
   firstTouch();
   /* drop immediately — rapid clicking lays ink without delay */
-  let idx=inkSel;
-  if(altMode&&inkSel!==5){idx=(altPhase++%2===0)?inkSel:5;}
-  drop(x,y,idx);
+  tapDrop(x,y,inkSel);
   ptrs.set(e.pointerId,{x,y});
 },{passive:true});
 canvas.addEventListener('pointermove',e=>{
@@ -557,7 +570,7 @@ document.querySelectorAll('.dot').forEach(d=>{
   d.addEventListener('click',()=>{
     document.querySelectorAll('.dot').forEach(x=>x.classList.remove('sel'));
     d.classList.add('sel');
-    inkSel=+d.dataset.i;altPhase=0;
+    inkSel=+d.dataset.i;
   });
 });
 const bAlt=document.getElementById('bAlt');
@@ -580,18 +593,16 @@ document.getElementById('bSave').onclick=()=>{
   a.click();
 };
 
-/* ---------- opening demo: classic alternating drops ---------- */
+/* ---------- opening demo: tapped drops (auto water rings) ---------- */
 {
   let t0=600;
   const cx=0.5,cy=0.55;
-  for(let i=0;i<11;i++){
-    demoQ.push({t:t0,x:cx+(Math.random()-0.5)*0.012,y:cy+(Math.random()-0.5)*0.012,ink:i%2===0?0:5});
-    t0+=520;
+  for(let i=0;i<6;i++){
+    demoQ.push({t:t0,x:cx+(Math.random()-0.5)*0.012,y:cy+(Math.random()-0.5)*0.012,ink:0});
+    t0+=680;
   }
   demoQ.push({t:t0+300,x:cx-0.18,y:cy+0.1,ink:1});
-  demoQ.push({t:t0+900,x:cx-0.18,y:cy+0.1,ink:5});
-  demoQ.push({t:t0+1500,x:cx+0.2,y:cy-0.12,ink:2});
-  demoQ.push({t:t0+2100,x:cx+0.2,y:cy-0.12,ink:5});
+  demoQ.push({t:t0+900,x:cx+0.2,y:cy-0.12,ink:2});
 }
 
 /* ---------- main loop ---------- */
@@ -599,7 +610,7 @@ let last=performance.now(),start=last;
 function frame(now){
   const dt=Math.min((now-last)/1000,1/40);last=now;
   const el=now-start;
-  while(demoQ.length&&el>=demoQ[0].t){const d=demoQ.shift();drop(d.x,d.y,d.ink);}
+  while(demoQ.length&&el>=demoQ[0].t){const d=demoQ.shift();tapDrop(d.x,d.y,d.ink);}
   if(windOn)wind(dt);
   step(dt*0.85);
   render(now/1000);
