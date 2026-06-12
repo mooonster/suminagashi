@@ -38,10 +38,11 @@
 
   /* ---- bottom palette ---- */
   #deck{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:10;
-    display:flex;align-items:center;justify-content:center;gap:14px;row-gap:8px;
-    padding:10px 20px 8px;max-width:94vw;flex-wrap:wrap;
+    display:flex;flex-direction:column;align-items:center;gap:10px;
+    padding:12px 22px 11px;max-width:94vw;
     background:rgba(241,232,215,.78);backdrop-filter:blur(8px);
-    border:1px solid rgba(60,50,40,.18);border-radius:26px;box-shadow:0 2px 14px rgba(60,50,40,.12)}
+    border:1px solid rgba(60,50,40,.18);border-radius:28px;box-shadow:0 2px 14px rgba(60,50,40,.12)}
+  #deck .row{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;row-gap:8px}
   .dot{display:flex;flex-direction:column;align-items:center;gap:3px;flex-shrink:0;
     background:none;border:none;cursor:pointer;padding:2px 1px;transition:transform .2s}
   .dot:hover{transform:translateY(-2px)}
@@ -49,7 +50,6 @@
     box-shadow:inset 0 -3px 5px rgba(0,0,0,.25), inset 0 2px 3px rgba(255,255,255,.35), 0 1px 3px rgba(0,0,0,.2)}
   .dot.sel i::after{content:'';position:absolute;inset:-5px;border:1.4px solid rgba(60,50,40,.55);border-radius:50%}
   .dot span{font-size:10px;letter-spacing:.08em;color:#5a523f;white-space:nowrap;font-family:inherit}
-  #deck .sep{width:1px;height:30px;background:rgba(60,50,40,.2);flex-shrink:0}
   .act{font-family:inherit;font-size:12px;letter-spacing:.16em;color:#4a4337;background:none;
     border:1px solid rgba(60,50,40,.3);border-radius:18px;padding:6px 13px;cursor:pointer;
     transition:background .2s,color .2s;white-space:nowrap;flex-shrink:0}
@@ -60,10 +60,11 @@
     #title{top:14px;left:14px;gap:8px}
     #title .main{font-size:22px}
     #hanko{width:27px;height:27px;font-size:13px;right:14px;top:14px}
-    #deck{gap:9px;padding:8px 10px 6px;bottom:10px;border-radius:20px}
-    .dot i{width:24px;height:24px}
+    #deck{gap:8px;padding:10px 12px 8px;bottom:10px;border-radius:22px;width:94vw}
+    #deck .row{gap:9px}
+    .dot i{width:25px;height:25px}
     .dot span{font-size:9px}
-    .act{font-size:11px;padding:5px 9px;letter-spacing:.08em}
+    .act{font-size:11px;padding:5px 11px;letter-spacing:.08em}
     #hint .jp{font-size:12px;letter-spacing:.18em}
     #hint .zh{font-size:11px;letter-spacing:.12em}
     #hint{width:88vw}
@@ -85,17 +86,23 @@
 </div>
 
 <div id="deck">
-  <button class="dot sel" data-i="0"><i style="background:radial-gradient(circle at 35% 30%,#56504a,#16130f)"></i><span>墨</span></button>
-  <button class="dot" data-i="1"><i style="background:radial-gradient(circle at 35% 30%,#3e5e8e,#13263f)"></i><span>藍</span></button>
-  <button class="dot" data-i="2"><i style="background:radial-gradient(circle at 35% 30%,#d4604a,#8e2418)"></i><span>朱</span></button>
-  <button class="dot" data-i="3"><i style="background:radial-gradient(circle at 35% 30%,#5d7a52,#27402a)"></i><span>松</span></button>
-  <button class="dot" data-i="4"><i style="background:radial-gradient(circle at 35% 30%,#c9a64e,#7e6020)"></i><span>金茶</span></button>
-  <button class="dot" data-i="5"><i style="background:radial-gradient(circle at 35% 30%,#ffffff,#cfd8da)"></i><span>水</span></button>
-  <div class="sep"></div>
-  <button class="act on" id="bAlt">暈圈</button>
-  <button class="act" id="bWind">微風</button>
-  <button class="act" id="bClear">流す</button>
-  <button class="act" id="bSave">保存</button>
+  <div class="row">
+    <button class="dot sel" data-i="0"><i style="background:radial-gradient(circle at 35% 30%,#56504a,#16130f)"></i><span>墨</span></button>
+    <button class="dot" data-i="1"><i style="background:radial-gradient(circle at 35% 30%,#3e5e8e,#13263f)"></i><span>藍</span></button>
+    <button class="dot" data-i="2"><i style="background:radial-gradient(circle at 35% 30%,#e0432a,#8e1408)"></i><span>朱</span></button>
+    <button class="dot" data-i="3"><i style="background:radial-gradient(circle at 35% 30%,#8a5fa0,#3d2256)"></i><span>紫</span></button>
+    <button class="dot" data-i="4"><i style="background:radial-gradient(circle at 35% 30%,#5d7a52,#27402a)"></i><span>松</span></button>
+    <button class="dot" data-i="5"><i style="background:radial-gradient(circle at 35% 30%,#e7c33e,#96720f)"></i><span>金茶</span></button>
+    <button class="dot" data-i="6"><i style="background:radial-gradient(circle at 35% 30%,#efb6c2,#c46e84)"></i><span>桜</span></button>
+    <button class="dot" data-i="7"><i style="background:radial-gradient(circle at 35% 30%,#ffffff,#cfd8da)"></i><span>水</span></button>
+  </div>
+  <div class="row">
+    <button class="act on" id="bAlt">暈圈</button>
+    <button class="act" id="bWind">微風</button>
+    <button class="act" id="bGyro">傾斜</button>
+    <button class="act" id="bClear">流す</button>
+    <button class="act" id="bSave">保存</button>
+  </div>
 </div>
 
 <script>
@@ -353,6 +360,7 @@ function initFBOs(){
   const simR=128, dyeR=Math.min(1024,Math.max(512,Math.floor(Math.max(canvas.width,canvas.height)/1.6)));
   function dims(r){let w,h;if(aspect>1){w=Math.round(r*aspect);h=r;}else{w=r;h=Math.round(r/aspect);}return[w,h];}
   [SIMW,SIMH]=dims(simR);[DYEW,DYEH]=dims(dyeR);
+  const oldDye=dye;
   velocity=createDouble(SIMW,SIMH,fmtRG,FILT);
   dye=createDouble(DYEW,DYEH,fmtRGBA,FILT);
   dyeTmp1=createFBO(DYEW,DYEH,fmtRGBA,FILT);
@@ -360,6 +368,12 @@ function initFBOs(){
   pressure=createDouble(SIMW,SIMH,fmtR,gl.NEAREST);
   divergence=createFBO(SIMW,SIMH,fmtR,gl.NEAREST);
   curlF=createFBO(SIMW,SIMH,fmtR,gl.NEAREST);
+  /* artwork survives resizes / phone rotation */
+  if(oldDye){
+    P.copy.bind();
+    gl.uniform1i(P.copy.u.uTex,oldDye.r.attach(0));
+    blit(dye.w2);dye.swap();
+  }
 }
 
 /* ---------- sizing ---------- */
@@ -377,11 +391,14 @@ addEventListener('resize',()=>{clearTimeout(rsTimer);rsTimer=setTimeout(()=>{if(
 const INKS=[
   {a:[2.45,2.35,2.15],s:'墨'},      // sumi — warm black
   {a:[2.30,1.40,0.42],s:'藍'},      // ai indigo
-  {a:[0.30,1.85,2.10],s:'朱'},      // shu vermillion
+  {a:[0.22,2.10,2.35],s:'朱'},      // shu vermillion — pure red
+  {a:[1.15,2.10,0.55],s:'紫'},      // murasaki purple
   {a:[1.55,0.55,1.45],s:'松'},      // matsuba green
-  {a:[0.40,0.95,1.95],s:'金茶'},    // kincha ochre
+  {a:[0.16,0.52,2.35],s:'金茶'},    // kincha — golden yellow
+  {a:[0.08,0.90,0.50],s:'桜'},      // sakura pink
   {a:null,s:'水'}                   // water (dispersant)
 ];
+const WATER=7;
 let inkSel=0, altMode=true, windOn=false;
 
 /* ---------- splat ops ---------- */
@@ -437,12 +454,20 @@ function drop(x,y,inkIdx,rOverride){
   dropWarp(x,y,r,ink.a?ink.a.map(v=>v*3.2):null);
 }
 /* a tap: always lays visible ink; in 暈圈 mode a smaller water push
-   follows automatically, opening each blot into a ring */
+   follows automatically, opening each blot into a ring.
+   water is queued and fired from the frame loop (deterministic order) */
+const waterQ=[];
 function tapDrop(x,y,inkIdx){
   drop(x,y,inkIdx);
-  if(altMode&&inkIdx!==5){
+  if(altMode&&inkIdx!==WATER){
     const rw=(0.030+Math.random()*0.014)*0.50;
-    setTimeout(()=>drop(x,y,5,rw),170);
+    waterQ.push({t:performance.now()+170,x,y,rw});
+  }
+}
+function flushWaterQ(){
+  while(waterQ.length&&performance.now()>=waterQ[0].t){
+    const w=waterQ.shift();
+    drop(w.x,w.y,WATER,w.rw);
   }
 }
 function stir(x,y,dx,dy){
@@ -577,6 +602,34 @@ const bAlt=document.getElementById('bAlt');
 bAlt.onclick=()=>{altMode=!altMode;bAlt.classList.toggle('on',altMode);};
 const bWind=document.getElementById('bWind');
 bWind.onclick=()=>{windOn=!windOn;bWind.classList.toggle('on',windOn);};
+
+/* ---- gyroscope tilt: slosh the tray (mobile) ---- */
+let gyroOn=false,gyroVec=null,gyroNeutral=null;
+function onOrient(e){
+  if(e.beta==null||e.gamma==null)return;
+  if(!gyroNeutral)gyroNeutral={b:e.beta,g:e.gamma};
+  const gx=clampv((e.gamma-gyroNeutral.g)/35,-1,1);
+  const gy=clampv((e.beta-gyroNeutral.b)/35,-1,1);
+  gyroVec=[gx,-gy];
+}
+const bGyro=document.getElementById('bGyro');
+bGyro.onclick=async()=>{
+  if(!gyroOn){
+    try{
+      if(window.DeviceOrientationEvent&&typeof DeviceOrientationEvent.requestPermission==='function'){
+        const res=await DeviceOrientationEvent.requestPermission();
+        if(res!=='granted')return;
+      }
+    }catch(_){return;}
+    gyroNeutral=null;gyroVec=null;
+    addEventListener('deviceorientation',onOrient);
+    gyroOn=true;firstTouch();
+  }else{
+    removeEventListener('deviceorientation',onOrient);
+    gyroOn=false;gyroVec=null;
+  }
+  bGyro.classList.toggle('on',gyroOn);
+};
 document.getElementById('bClear').onclick=()=>{
   P.clear.bind();
   gl.uniform1i(P.clear.u.uTex,dye.r.attach(0));
@@ -606,12 +659,22 @@ document.getElementById('bSave').onclick=()=>{
 }
 
 /* ---------- main loop ---------- */
-let last=performance.now(),start=last;
+let last=performance.now(),demoT=0;
 function frame(now){
   const dt=Math.min((now-last)/1000,1/40);last=now;
-  const el=now-start;
-  while(demoQ.length&&el>=demoQ[0].t){const d=demoQ.shift();tapDrop(d.x,d.y,d.ink);}
+  /* demo clock accumulates only while the page is animating —
+     background tabs resume the show instead of bursting it */
+  demoT+=dt*1000;
+  while(demoQ.length&&demoT>=demoQ[0].t){const d=demoQ.shift();tapDrop(d.x,d.y,d.ink);}
+  flushWaterQ();
   if(windOn)wind(dt);
+  if(gyroOn&&gyroVec){
+    const m=Math.hypot(gyroVec[0],gyroVec[1]);
+    if(m>0.05){
+      const k=dt*60*2.4;
+      splatVelDir(0.5,0.5,gyroVec[0]*k,gyroVec[1]*k,0.5);
+    }
+  }
   step(dt*0.85);
   render(now/1000);
   requestAnimationFrame(frame);
