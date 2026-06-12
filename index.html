@@ -137,6 +137,8 @@ function getGL(){
 }
 const{gl,is2,halfType,canLinear,fmtRGBA,fmtRG,fmtR}=getGL();
 const FILT=canLinear?gl.LINEAR:gl.NEAREST;
+const isMobile=navigator.maxTouchPoints>1&&innerWidth<1024;
+function clampv(v,lo,hi){return Math.min(Math.max(v,lo),hi);}
 
 /* ---------- shaders ---------- */
 const VERT=`
@@ -357,7 +359,10 @@ let velocity,dye,pressure,divergence,curlF,dyeTmp1,dyeTmp2;
 let SIMW,SIMH,DYEW,DYEH;
 function initFBOs(){
   const aspect=canvas.width/canvas.height;
-  const simR=128, dyeR=Math.min(1024,Math.max(512,Math.floor(Math.max(canvas.width,canvas.height)/1.6)));
+  const simR=isMobile?96:128;
+  const dyeR=isMobile
+    ?Math.min(512,Math.max(256,Math.floor(Math.min(canvas.width,canvas.height))))
+    :Math.min(1024,Math.max(512,Math.floor(Math.max(canvas.width,canvas.height)/1.6)));
   function dims(r){let w,h;if(aspect>1){w=Math.round(r*aspect);h=r;}else{w=r;h=Math.round(r/aspect);}return[w,h];}
   [SIMW,SIMH]=dims(simR);[DYEW,DYEH]=dims(dyeR);
   const oldDye=dye;
@@ -450,7 +455,8 @@ function dropWarp(x,y,r,inkA){
    outward incompressibly; ink stamps a disc, water stamps paper */
 function drop(x,y,inkIdx,rOverride){
   const ink=INKS[inkIdx];
-  const r=rOverride||(ink.a?0.030+Math.random()*0.014:0.026+Math.random()*0.012);
+  const base=isMobile?0.048:0.030, jit=isMobile?0.020:0.014;
+  const r=rOverride||(ink.a?base+Math.random()*jit:(base-0.004)+Math.random()*(jit-0.002));
   dropWarp(x,y,r,ink.a?ink.a.map(v=>v*3.2):null);
 }
 /* a tap: always lays visible ink; in 暈圈 mode a smaller water push
@@ -460,7 +466,8 @@ const waterQ=[];
 function tapDrop(x,y,inkIdx){
   drop(x,y,inkIdx);
   if(altMode&&inkIdx!==WATER){
-    const rw=(0.030+Math.random()*0.014)*0.50;
+    const base=isMobile?0.048:0.030, jit=isMobile?0.020:0.014;
+    const rw=(base+Math.random()*jit)*0.50;
     waterQ.push({t:performance.now()+170,x,y,rw});
   }
 }
@@ -470,12 +477,12 @@ function flushWaterQ(){
     drop(w.x,w.y,WATER,w.rw);
   }
 }
-function stir(x,y,dx,dy){
-  splatVelDir(x,y,dx*2500,dy*2500,0.0009);
+function stir(x,y,dx,dy,touch){
+  splatVelDir(x,y,dx*2500,dy*2500,touch?0.003:0.0009);
 }
 
 /* ---------- simulation step ---------- */
-const PRESSURE_ITERS=22, CURL_K=3.0, VEL_DISS=2.2, DYE_DISS=0.0012;
+const PRESSURE_ITERS=isMobile?14:22, CURL_K=3.0, VEL_DISS=2.2, DYE_DISS=0.03;
 function step(dt){
   gl.disable(gl.BLEND);
 
@@ -583,7 +590,7 @@ canvas.addEventListener('pointermove',e=>{
   const p=ptrs.get(e.pointerId);if(!p)return;
   const[x,y]=norm(e);
   const dx=x-p.x,dy=y-p.y;
-  if(dx||dy)stir(x,y,dx,dy);
+  if(dx||dy)stir(x,y,dx,dy,e.pointerType==='touch');
   p.x=x;p.y=y;
 },{passive:true});
 function endPtr(e){ptrs.delete(e.pointerId);}
