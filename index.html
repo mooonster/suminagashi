@@ -161,16 +161,28 @@ void main(){
 }`,
 
 dropWarp:`precision highp float;varying vec2 vUv;uniform sampler2D uTarget;
-uniform float aspect,r2,isInk;uniform vec2 point;uniform vec3 inkCol;
+uniform float aspect,r2,isInk,seed;uniform vec2 point;uniform vec3 inkCol;
 void main(){
   vec2 p=vUv-point;p.x*=aspect;
   float d2=dot(p,p);
-  if(d2<r2){
-    gl_FragColor=vec4(inkCol*isInk,1.);
+  float rr=sqrt(r2), d=sqrt(d2);
+  float ang=atan(p.y,p.x);
+  /* per-drop irregular blot edge */
+  float wob=0.5*sin(ang*7.+seed*13.)+0.3*sin(ang*17.+seed*29.)+0.2*sin(ang*3.-seed*7.);
+  float re=rr*(1.+0.055*wob), re2=re*re;
+  if(d<re){
+    if(isInk>0.5){
+      /* dense core, narrow feathered edge */
+      float t=smoothstep(re*0.94,re,d);
+      gl_FragColor=vec4(inkCol*(1.-0.30*t),1.);
+    }else{
+      gl_FragColor=vec4(0.,0.,0.,1.);
+    }
   }else{
-    vec2 q=p*sqrt(max(1.-r2/d2,0.0));
+    vec2 q=p*sqrt(max(1.-r2/max(d2,r2*1.05),0.0));
     q.x/=aspect;
-    gl_FragColor=texture2D(uTarget,point+q);
+    vec3 c=texture2D(uTarget,point+q).rgb;
+    gl_FragColor=vec4(c,1.);
   }
 }`,
 
@@ -405,6 +417,7 @@ function dropWarp(x,y,r,inkA){
   gl.uniform2f(P.dropWarp.u.point,x,y);
   gl.uniform1f(P.dropWarp.u.r2,r*r);
   gl.uniform1f(P.dropWarp.u.isInk,inkA?1:0);
+  gl.uniform1f(P.dropWarp.u.seed,Math.random()*100);
   gl.uniform3f(P.dropWarp.u.inkCol,...(inkA||[0,0,0]));
   blit(dye.w2);dye.swap();
 }
@@ -414,7 +427,7 @@ function dropWarp(x,y,r,inkA){
 function drop(x,y,inkIdx){
   const ink=INKS[inkIdx];
   const r=ink.a?0.030+Math.random()*0.014:0.026+Math.random()*0.012;
-  dropWarp(x,y,r,ink.a?ink.a.map(v=>v*1.6):null);
+  dropWarp(x,y,r,ink.a?ink.a.map(v=>v*1.8):null);
   splatVelRadial(x,y,0.0014,ink.a?8:14);
 }
 function stir(x,y,dx,dy){
@@ -521,27 +534,21 @@ function norm(e){const r=canvas.getBoundingClientRect();return[(e.clientX-r.left
 canvas.addEventListener('pointerdown',e=>{
   try{canvas.setPointerCapture(e.pointerId);}catch(_){}
   const[x,y]=norm(e);
-  ptrs.set(e.pointerId,{x,y,sx:x,sy:y,t:performance.now(),moved:false});
+  firstTouch();
+  /* drop immediately — rapid clicking lays ink without delay */
+  let idx=inkSel;
+  if(altMode&&inkSel!==5){idx=(altPhase++%2===0)?inkSel:5;}
+  drop(x,y,idx);
+  ptrs.set(e.pointerId,{x,y});
 },{passive:true});
 canvas.addEventListener('pointermove',e=>{
   const p=ptrs.get(e.pointerId);if(!p)return;
   const[x,y]=norm(e);
   const dx=x-p.x,dy=y-p.y;
-  const dist=Math.hypot(x-p.sx,y-p.sy);
-  if(dist>0.012)p.moved=true;
-  if(p.moved&&(dx||dy)){firstTouch();stir(x,y,dx,dy);}
+  if(dx||dy)stir(x,y,dx,dy);
   p.x=x;p.y=y;
 },{passive:true});
-function endPtr(e){
-  const p=ptrs.get(e.pointerId);if(!p)return;
-  ptrs.delete(e.pointerId);
-  if(!p.moved&&performance.now()-p.t<600){
-    firstTouch();
-    let idx=inkSel;
-    if(altMode&&inkSel!==5){idx=(altPhase++%2===0)?inkSel:5;}
-    drop(p.x,p.y,idx);
-  }
-}
+function endPtr(e){ptrs.delete(e.pointerId);}
 canvas.addEventListener('pointerup',endPtr,{passive:true});
 canvas.addEventListener('pointercancel',endPtr,{passive:true});
 
